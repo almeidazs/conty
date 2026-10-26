@@ -69,6 +69,8 @@ console.log(coupon.data.id, coupon.data.totals.sales_count);
 | `client.campaigns` | `list`, `get`, `stages`, `items` |
 | `client.missions` | `get` |
 
+</div>
+
 <div align="center">
 
 ## REST
@@ -87,7 +89,7 @@ const result = await client.rest.get<APICoupon>(Routes.coupon(id), {
 
 if (!result.ok) {
 	console.error(result.error.type, result.error.message);
-	
+
 	return;
 }
 
@@ -107,9 +109,9 @@ import { Routes } from 'contyos/types';
 const rest = new REST({
 	retries: 3,
 	timeout: 15_000,
-	secret: process.env.CONTY_SECRET,
+	secret: process.env.CONTY_API_KEY,
 	hooks: {
-		onRetry: ({ attempt, delay }) => 
+		onRetry: ({ attempt, delay }) =>
 			console.log(`Retry #${attempt} em ${delay}ms`),
 	},
 });
