@@ -1,0 +1,20 @@
+name: 'Melhoria na documentação'
+description: Sugira melhorias na documentação
+title: '[DOCS]:'
+labels: ['docs']
+
+body:
+    - type: checkboxes
+      id: verified
+      attributes:
+          label: A melhoria ainda não foi sugerida.
+          options:
+              - label: Verifiquei que a melhoria que vou solicitar ainda não foi sugerida.
+                required: true
+
+    - type: textarea
+      attributes:
+          label: Descreva a melhoria que você deseja solicitar
+          description: O que você quer alterar ou adicionar na documentação?
+      validations:
+          required: true

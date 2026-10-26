@@ -1,0 +1,50 @@
+name: 'Relato de bug'
+description: Relate um problema ou possível bug
+title: '[BUG]:'
+labels: ['bug']
+
+body:
+    - type: markdown
+      attributes:
+          value: |
+              Obrigado por reservar um tempo para relatar um bug! Forneça o máximo de informações possível.
+
+    - type: checkboxes
+      id: verified
+      attributes:
+          label: O relato ainda não foi feito.
+          options:
+              - label: Verifiquei que o bug que vou relatar ainda não foi reportado.
+                required: true
+
+    - type: input
+      attributes:
+          label: Qual versão do `contyos` você está usando?
+          description: Você pode ver a versão abrindo o `package.json` do seu projeto.
+          placeholder: 0.0.1
+      validations:
+          required: true
+
+    - type: input
+      attributes:
+          label: Outros subpaths
+          description: Se o bug estiver relacionado a algum subpath do pacote, informe-o aqui.
+          placeholder: contyos/rest
+      validations:
+          required: false
+
+    - type: textarea
+      attributes:
+          label: Descreva o bug
+          description: |
+              Para preencher este campo, responda:
+                - Qual é o comportamento indesejado?
+                - Quais são os passos para reproduzi-lo?
+                - Qual é o resultado esperado?
+
+              Se o problema for mais específico, considere responder também:
+                - Você está em um monorepo?
+                - Se for um bug de tipos: qual versão do TypeScript você usa? Qual o conteúdo do seu `tsconfig.json`?
+                - Se você usa um runtime diferente do Node.js: qual e qual versão? Verificou que o problema não é do próprio runtime?
+      validations:
+          required: true

@@ -1,0 +1,20 @@
+name: 'Sugestão de funcionalidade'
+description: Sugira uma nova funcionalidade
+title: '[FEATURE]:'
+labels: ['enhancement']
+
+body:
+    - type: checkboxes
+      id: verified
+      attributes:
+          label: A funcionalidade ainda não foi sugerida.
+          options:
+              - label: Verifiquei que a funcionalidade que vou solicitar ainda não foi sugerida.
+                required: true
+
+    - type: textarea
+      attributes:
+          label: Descreva a melhoria que você deseja solicitar
+          description: O que você quer alterar ou adicionar? Quais são os benefícios de implementar isso?
+      validations:
+          required: true
