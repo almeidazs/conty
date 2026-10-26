@@ -128,6 +128,43 @@ await rest.get(Routes.campaigns(), { query: { status: 'approved' } });
 | Timeout | 15s por tentativa |
 | Autenticação | `Authorization: Bearer <secret>` |
 
+</div>
+
+<div align="center">
+
+## Webhooks
+
+Confira a assinatura de cada entrega (`X-Conty-Signature`) antes de processar o evento.
+Use o **corpo cru** da requisição: não faça `JSON.parse` antes.
+
+</div>
+
+```ts
+import { construct } from 'contyos/webhooks';
+
+app.post('/webhooks/conty', express.raw({ type: 'application/json' }), async (req, res) => {
+	const event = await construct({
+		body: req.body,
+		header: req.get('x-conty-signature'),
+		secret: process.env.CONTY_WEBHOOK_SECRET,
+	});
+
+	if (!event) return res.sendStatus(400);
+
+	if (event.type === 'application.approved') {
+		// `event.data.mission.id` é o `mission_id` do `POST /coupons`.
+	}
+
+	res.sendStatus(200);
+});
+```
+
+<div align="center">
+
+O módulo exporta `verify` (Só a verificação, devolve `boolean`), `construct` e `sign`.
+Durante a troca do segredo, passe os dois: `[novo, antigo]`.
+Para testar o seu endpoint, `sign({ body, secret })` gera o cabeçalho como a Conty gera.
+
 ## Subpaths
 
 </div>
@@ -136,6 +173,7 @@ await rest.get(Routes.campaigns(), { query: { status: 'approved' } });
 | --- | --- |
 | `contyos` | Cliente `Conty` |
 | `contyos/rest` | Cliente HTTP da API da Conty |
+| `contyos/webhooks` | Verificação da assinatura dos webhooks (`construct`, `verify`, `sign`) |
 | `contyos/types` | Tipos da API (`API*`, `REST*`), eventos de webhook (`Webhook*`) e `Routes` |
 
 <div align="center">
