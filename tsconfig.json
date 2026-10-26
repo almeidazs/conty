@@ -6,7 +6,8 @@
 		"paths": {
 			"contyos": ["./src/index.ts"],
 			"contyos/rest": ["./src/modules/rest/index.ts"],
-			"contyos/types": ["./src/modules/types/index.ts"]
+			"contyos/types": ["./src/modules/types/index.ts"],
+			"contyos/webhooks": ["./src/modules/webhooks/index.ts"]
 		},
 		"resolveJsonModule": true,
 		"esModuleInterop": true,

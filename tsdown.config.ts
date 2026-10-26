@@ -11,6 +11,7 @@ export default defineConfig({
 		index: 'src/index.ts',
 		rest: 'src/modules/rest/index.ts',
 		types: 'src/modules/types/index.ts',
+		webhooks: 'src/modules/webhooks/index.ts',
 	},
 	fixedExtension: false,
 	format: ['esm', 'cjs'],

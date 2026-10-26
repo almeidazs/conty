@@ -53,6 +53,16 @@
 				"types": "./dist/types.d.cts",
 				"default": "./dist/types.cjs"
 			}
+		},
+		"./webhooks": {
+			"import": {
+				"types": "./dist/webhooks.d.ts",
+				"default": "./dist/webhooks.js"
+			},
+			"require": {
+				"types": "./dist/webhooks.d.cts",
+				"default": "./dist/webhooks.cjs"
+			}
 		}
 	},
 	"scripts": {
