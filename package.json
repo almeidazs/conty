@@ -1,0 +1,85 @@
+{
+	"name": "contyos",
+	"version": "0.0.1",
+	"description": "Unofficial library for appconty.com.",
+	"keywords": [
+		"appconty",
+		"contyos",
+		"typescript"
+	],
+	"homepage": "https://github.com/almeidazs/conty#readme",
+	"license": "Apache-2.0",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/almeidazs/conty.git"
+	},
+	"files": [
+		"LICENSE",
+		"dist",
+		"README.md"
+	],
+	"type": "module",
+	"sideEffects": false,
+	"main": "./dist/index.cjs",
+	"module": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"exports": {
+		".": {
+			"import": {
+				"types": "./dist/index.d.ts",
+				"default": "./dist/index.js"
+			},
+			"require": {
+				"types": "./dist/index.d.cts",
+				"default": "./dist/index.cjs"
+			}
+		},
+		"./rest": {
+			"import": {
+				"types": "./dist/rest.d.ts",
+				"default": "./dist/rest.js"
+			},
+			"require": {
+				"types": "./dist/rest.d.cts",
+				"default": "./dist/rest.cjs"
+			}
+		},
+		"./types": {
+			"import": {
+				"types": "./dist/types.d.ts",
+				"default": "./dist/types.js"
+			},
+			"require": {
+				"types": "./dist/types.d.cts",
+				"default": "./dist/types.cjs"
+			}
+		}
+	},
+	"scripts": {
+		"prepare": "lefthook install",
+		"build": "tsdown --config tsdown.config.ts",
+		"check": "bun run check:types && bun run check:lint && bun run test && bun run pack",
+		"check:lint": "NODE_OPTIONS=--import=tsx oxfmt --config oxfmt.config.ts --check . '!**/*.{md,mdx}' && NODE_OPTIONS=--import=tsx oxlint --config oxlint.config.ts .",
+		"check:types": "bunx tsc --noEmit",
+		"fix": "NODE_OPTIONS=--import=tsx oxlint --config oxlint.config.ts --fix . && NODE_OPTIONS=--import=tsx oxfmt --config oxfmt.config.ts --write . '!**/*.{md,mdx}'",
+		"lint:commit": "commitlint",
+		"pack": "bun run build && npm pack --dry-run --ignore-scripts",
+		"test": "bun test tests"
+	},
+	"devDependencies": {
+		"@commitlint/config-conventional": "^21.2.4",
+		"@types/bun": "^1.4.4",
+		"commitlint": "^21.2.4",
+		"lefthook": "^2.2.2",
+		"oxfmt": "^0.74.0",
+		"oxlint": "^1.89.0",
+		"tsdown": "^0.23.2",
+		"tsx": "^4.23.15",
+		"typescript": "^5.9.3",
+		"ultracite": "^8.0.2",
+		"unrun": "^0.3.1"
+	},
+	"engines": {
+		"node": ">=20"
+	}
+}

@@ -1,0 +1,26 @@
+{
+	"compilerOptions": {
+		"target": "ES2022",
+		"module": "ES2022",
+		"moduleResolution": "bundler",
+		"paths": {
+			"contyos": ["./src/index.ts"],
+			"contyos/rest": ["./src/modules/rest/index.ts"],
+			"contyos/types": ["./src/modules/types/index.ts"]
+		},
+		"resolveJsonModule": true,
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
+		"strict": true,
+		"skipLibCheck": true,
+		"types": ["bun"]
+	},
+	"include": [
+		"commitlint.config.ts",
+		"oxfmt.config.ts",
+		"oxlint.config.ts",
+		"tsdown.config.ts",
+		"src/**/*.ts",
+		"tests/types/**/*.ts"
+	]
+}
