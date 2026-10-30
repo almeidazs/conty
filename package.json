@@ -54,6 +54,16 @@
 				"default": "./dist/express.cjs"
 			}
 		},
+		"./fastify": {
+			"import": {
+				"types": "./dist/fastify.d.ts",
+				"default": "./dist/fastify.js"
+			},
+			"require": {
+				"types": "./dist/fastify.d.cts",
+				"default": "./dist/fastify.cjs"
+			}
+		},
 		"./fetch": {
 			"import": {
 				"types": "./dist/fetch.d.ts",

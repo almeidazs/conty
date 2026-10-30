@@ -11,6 +11,7 @@ export default defineConfig({
 		index: 'src/index.ts',
 		elysia: 'src/modules/elysia/index.ts',
 		express: 'src/modules/express/index.ts',
+		fastify: 'src/modules/fastify/index.ts',
 		fetch: 'src/modules/fetch/index.ts',
 		hono: 'src/modules/hono/index.ts',
 		next: 'src/modules/next/index.ts',

@@ -7,6 +7,7 @@
 			"contyos": ["./src/index.ts"],
 			"contyos/elysia": ["./src/modules/elysia/index.ts"],
 			"contyos/express": ["./src/modules/express/index.ts"],
+			"contyos/fastify": ["./src/modules/fastify/index.ts"],
 			"contyos/fetch": ["./src/modules/fetch/index.ts"],
 			"contyos/hono": ["./src/modules/hono/index.ts"],
 			"contyos/next": ["./src/modules/next/index.ts"],
