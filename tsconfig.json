@@ -5,6 +5,8 @@
 		"moduleResolution": "bundler",
 		"paths": {
 			"contyos": ["./src/index.ts"],
+			"contyos/fetch": ["./src/modules/fetch/index.ts"],
+			"contyos/next": ["./src/modules/next/index.ts"],
 			"contyos/rest": ["./src/modules/rest/index.ts"],
 			"contyos/types": ["./src/modules/types/index.ts"],
 			"contyos/webhooks": ["./src/modules/webhooks/index.ts"]

@@ -9,6 +9,8 @@ export default defineConfig({
 	dts: true,
 	entry: {
 		index: 'src/index.ts',
+		fetch: 'src/modules/fetch/index.ts',
+		next: 'src/modules/next/index.ts',
 		rest: 'src/modules/rest/index.ts',
 		types: 'src/modules/types/index.ts',
 		webhooks: 'src/modules/webhooks/index.ts',

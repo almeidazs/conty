@@ -34,6 +34,26 @@
 				"default": "./dist/index.cjs"
 			}
 		},
+		"./fetch": {
+			"import": {
+				"types": "./dist/fetch.d.ts",
+				"default": "./dist/fetch.js"
+			},
+			"require": {
+				"types": "./dist/fetch.d.cts",
+				"default": "./dist/fetch.cjs"
+			}
+		},
+		"./next": {
+			"import": {
+				"types": "./dist/next.d.ts",
+				"default": "./dist/next.js"
+			},
+			"require": {
+				"types": "./dist/next.d.cts",
+				"default": "./dist/next.cjs"
+			}
+		},
 		"./rest": {
 			"import": {
 				"types": "./dist/rest.d.ts",
