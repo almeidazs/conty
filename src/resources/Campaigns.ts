@@ -1,4 +1,4 @@
-import type { REST, RequestOptions, RESTResult } from '../modules/rest';
+import type { REST, RequestOptions } from '../modules/rest';
 import {
 	type ID,
 	type RESTGetCampaignItemsQuery,
@@ -10,6 +10,8 @@ import {
 	type RESTGetCampaignStagesResult,
 	Routes,
 } from '../modules/types';
+import type { ContyResponse } from '../types';
+import { respond } from './respond';
 
 /** Campaigns (agreements and standalone ones) and their board. Read only. */
 export class Campaigns {
@@ -23,16 +25,18 @@ export class Campaigns {
 	list(
 		query?: RESTGetCampaignsQuery,
 		options?: RequestOptions,
-	): Promise<RESTResult<RESTGetCampaignsResult>> {
-		return this.#rest.get(Routes.campaigns(), { ...options, query });
+	): ContyResponse<RESTGetCampaignsResult> {
+		return respond(
+			this.#rest.get(Routes.campaigns(), { ...options, query }),
+		);
 	}
 
 	/** Gets a campaign with blocks, requirements and review chain. */
 	get(
 		campaignId: ID,
 		options?: RequestOptions,
-	): Promise<RESTResult<RESTGetCampaignResult>> {
-		return this.#rest.get(Routes.campaign(campaignId), options);
+	): ContyResponse<RESTGetCampaignResult> {
+		return respond(this.#rest.get(Routes.campaign(campaignId), options));
 	}
 
 	/** Gets the stages of the board, with counts, sorts and filters of each. */
@@ -40,11 +44,13 @@ export class Campaigns {
 		campaignId: ID,
 		query?: RESTGetCampaignStagesQuery,
 		options?: RequestOptions,
-	): Promise<RESTResult<RESTGetCampaignStagesResult>> {
-		return this.#rest.get(Routes.campaignStages(campaignId), {
-			...options,
-			query,
-		});
+	): ContyResponse<RESTGetCampaignStagesResult> {
+		return respond(
+			this.#rest.get(Routes.campaignStages(campaignId), {
+				...options,
+				query,
+			}),
+		);
 	}
 
 	/** Lists the missions or applications of a stage of the board. */
@@ -52,10 +58,12 @@ export class Campaigns {
 		campaignId: ID,
 		query: RESTGetCampaignItemsQuery,
 		options?: RequestOptions,
-	): Promise<RESTResult<RESTGetCampaignItemsResult>> {
-		return this.#rest.get(Routes.campaignItems(campaignId), {
-			...options,
-			query,
-		});
+	): ContyResponse<RESTGetCampaignItemsResult> {
+		return respond(
+			this.#rest.get(Routes.campaignItems(campaignId), {
+				...options,
+				query,
+			}),
+		);
 	}
 }

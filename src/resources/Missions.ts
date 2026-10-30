@@ -1,5 +1,7 @@
-import type { REST, RequestOptions, RESTResult } from '../modules/rest';
+import type { REST, RequestOptions } from '../modules/rest';
 import { type ID, type RESTGetMissionResult, Routes } from '../modules/types';
+import type { ContyResponse } from '../types';
+import { respond } from './respond';
 
 /** Missions of the creators. Read only. */
 export class Missions {
@@ -13,7 +15,7 @@ export class Missions {
 	get(
 		missionId: ID,
 		options?: RequestOptions,
-	): Promise<RESTResult<RESTGetMissionResult>> {
-		return this.#rest.get(Routes.mission(missionId), options);
+	): ContyResponse<RESTGetMissionResult> {
+		return respond(this.#rest.get(Routes.mission(missionId), options));
 	}
 }

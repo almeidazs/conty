@@ -1,7 +1,8 @@
-import { REST, type RequestOptions, type RESTResult } from './modules/rest';
+import { REST, type RequestOptions } from './modules/rest';
 import { type RESTGetMeResult, Routes } from './modules/types';
 import { Campaigns, Coupons, Missions } from './resources';
-import type { ContyOptions } from './types';
+import { respond } from './resources/respond';
+import type { ContyOptions, ContyResponse } from './types';
 
 /** Client of the Conty API. */
 export class Conty {
@@ -34,7 +35,7 @@ export class Conty {
 	}
 
 	/** Identifies the brand that owns the key. Use it to test the key. */
-	me(options?: RequestOptions): Promise<RESTResult<RESTGetMeResult>> {
-		return this.rest.get(Routes.me(), options);
+	me(options?: RequestOptions): ContyResponse<RESTGetMeResult> {
+		return respond(this.rest.get(Routes.me(), options));
 	}
 }
