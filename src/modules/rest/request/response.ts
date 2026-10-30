@@ -1,6 +1,7 @@
 import type { APIError } from '../../types';
+import { ContyError } from '../ContyError';
 import { parseRetryAfter } from '../retry/policy';
-import type { RESTFailure, RESTSuccess } from '../types';
+import type { RESTFailure, RESTResult, RESTSuccess } from '../types';
 
 /** Reads the body as JSON when declared (falling back to text), else as text. */
 export const parseResponse = async (response: Response): Promise<unknown> => {
@@ -77,4 +78,11 @@ export const toFailure = (
 			cause,
 		},
 	};
+};
+
+/** The data of a successful result, or throws a `ContyError` for a failed one. */
+export const unwrap = <T>(result: RESTResult<T>): T => {
+	if (!result.ok) throw new ContyError(result.error);
+
+	return result.data;
 };
