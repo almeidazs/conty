@@ -73,6 +73,38 @@ console.log(coupon.data.id, coupon.data.totals.sales_count);
 
 <div align="center">
 
+### Lançar erros
+
+O método devolve o resultado, e `.unwrap()` vira os dados ou lança um `ContyError`.
+Sem o `.unwrap()`, nada lança.
+
+</div>
+
+```ts
+import { Conty, ContyError } from 'contyos';
+
+const client = new Conty(process.env.CONTY_API_KEY);
+
+try {
+	const coupon = await client.coupons.get(couponId).unwrap();
+	
+	console.log(coupon.totals.sales_count);
+} catch (error) {
+	if (error instanceof ContyError && error.code === 'not_found') {
+		// Também há `status`, `requestId`, `details`, `retryAfter` e `type`.
+	}
+}
+```
+
+<div align="center">
+
+Falhas de rede, timeout e abort também viram `ContyError` (`type`), com o erro original em `cause`.
+Para os resultados do `client.rest`, use `unwrap(result)` de `contyos/rest`.
+
+</div>
+
+<div align="center">
+
 ## REST
 
 O `client.rest` é um cliente HTTP com retry, backoff exponencial e timeout.
