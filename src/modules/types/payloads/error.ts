@@ -29,6 +29,18 @@ export interface APIErrorDetail {
 	coupon_id?: ID;
 }
 
+/** `details` of the codes that always carry them. */
+export interface APIErrorDetailsByCode {
+	validation_failed: APIErrorDetail[];
+	coupon_exists: (APIErrorDetail & { coupon_id: ID })[];
+}
+
+/** The `details` an error with this code has: always present for some codes, optional for the rest. */
+export type APIErrorDetailsOf<Code extends APIErrorCode> =
+	Code extends keyof APIErrorDetailsByCode
+		? APIErrorDetailsByCode[Code]
+		: APIErrorDetail[] | undefined;
+
 /** The error object inside the envelope. */
 export interface APIError {
 	/** Stable code to handle in your own code. */
