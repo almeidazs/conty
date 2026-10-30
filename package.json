@@ -44,6 +44,16 @@
 				"default": "./dist/elysia.cjs"
 			}
 		},
+		"./express": {
+			"import": {
+				"types": "./dist/express.d.ts",
+				"default": "./dist/express.js"
+			},
+			"require": {
+				"types": "./dist/express.d.cts",
+				"default": "./dist/express.cjs"
+			}
+		},
 		"./fetch": {
 			"import": {
 				"types": "./dist/fetch.d.ts",
