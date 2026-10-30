@@ -101,6 +101,40 @@ try {
 Falhas de rede, timeout e abort também viram `ContyError` (`type`), com o erro original em `cause`.
 Para os resultados do `client.rest`, use `unwrap(result)` de `contyos/rest`.
 
+### Tratar erros por código
+
+Em vez de comparar `error.code` na mão, use os helpers: eles funcionam com o resultado e com o erro capturado do `.unwrap()`, e estreitam o tipo de `details`.
+
+</div>
+
+```ts
+import { isContyError, isCouponExists, isRateLimited } from 'contyos';
+
+const result = await client.coupons.create({ code: 'FULANA10', mission_id: missionId });
+
+if (isCouponExists(result)) {
+	// `details` nunca é `undefined` aqui, e cada item tem o `coupon_id`.
+	console.log(result.error.details[0]?.coupon_id);
+} else if (isRateLimited(result)) {
+	await sleep(result.error.retryAfter ?? 1000);
+} else if (isContyError(result, 'validation_failed')) {
+	console.log(result.error.details);
+}
+
+try {
+	await client.coupons.get(couponId).unwrap();
+} catch (error) {
+	if (isContyError(error, 'not_found')) {
+		// ...
+	}
+}
+```
+
+<div align="center">
+
+`isContyError(valor, código?)` serve para qualquer código da API. Os atalhos são `isCouponExists`, `isNotFound`, `isRateLimited` e `isValidationFailed`.
+Falhas sem código (rede, timeout, abort) nunca casam. Para elas, use `error.type`.
+
 </div>
 
 <div align="center">
