@@ -5,7 +5,9 @@
 		"moduleResolution": "bundler",
 		"paths": {
 			"contyos": ["./src/index.ts"],
+			"contyos/elysia": ["./src/modules/elysia/index.ts"],
 			"contyos/fetch": ["./src/modules/fetch/index.ts"],
+			"contyos/hono": ["./src/modules/hono/index.ts"],
 			"contyos/next": ["./src/modules/next/index.ts"],
 			"contyos/rest": ["./src/modules/rest/index.ts"],
 			"contyos/types": ["./src/modules/types/index.ts"],

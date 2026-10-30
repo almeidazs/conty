@@ -34,6 +34,16 @@
 				"default": "./dist/index.cjs"
 			}
 		},
+		"./elysia": {
+			"import": {
+				"types": "./dist/elysia.d.ts",
+				"default": "./dist/elysia.js"
+			},
+			"require": {
+				"types": "./dist/elysia.d.cts",
+				"default": "./dist/elysia.cjs"
+			}
+		},
 		"./fetch": {
 			"import": {
 				"types": "./dist/fetch.d.ts",
@@ -42,6 +52,16 @@
 			"require": {
 				"types": "./dist/fetch.d.cts",
 				"default": "./dist/fetch.cjs"
+			}
+		},
+		"./hono": {
+			"import": {
+				"types": "./dist/hono.d.ts",
+				"default": "./dist/hono.js"
+			},
+			"require": {
+				"types": "./dist/hono.d.cts",
+				"default": "./dist/hono.cjs"
 			}
 		},
 		"./next": {

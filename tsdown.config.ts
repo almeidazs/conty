@@ -9,7 +9,9 @@ export default defineConfig({
 	dts: true,
 	entry: {
 		index: 'src/index.ts',
+		elysia: 'src/modules/elysia/index.ts',
 		fetch: 'src/modules/fetch/index.ts',
+		hono: 'src/modules/hono/index.ts',
 		next: 'src/modules/next/index.ts',
 		rest: 'src/modules/rest/index.ts',
 		types: 'src/modules/types/index.ts',
