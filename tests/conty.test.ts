@@ -1,6 +1,14 @@
 import { describe, expect, test } from 'bun:test';
 
-import { Conty, ContyError } from '../src';
+import {
+	Conty,
+	ContyError,
+	isContyError,
+	isCouponExists,
+	isNotFound,
+	isRateLimited,
+	isValidationFailed,
+} from '../src';
 import { REST, unwrap } from '../src/modules/rest';
 import { createRest, headersOf, json } from './rest/helpers';
 
@@ -142,5 +150,76 @@ describe('unwrap', () => {
 		expect(() =>
 			unwrap({ ok: false, error: { type: 'network', message: 'x' } }),
 		).toThrow(ContyError);
+	});
+});
+
+describe('error guards', () => {
+	const envelope = (code: string, details?: unknown[]) =>
+		json(
+			{ error: { code, message: code, details, request_id: 'req_1' } },
+			{ status: 409 },
+		);
+	const clientFor = (code: string, details?: unknown[]) =>
+		new Conty({
+			rest: { retries: 0, fetch: async () => envelope(code, details) },
+		});
+
+	test('match a failed result by code', async () => {
+		const result = await clientFor('coupon_exists', [
+			{ coupon_id: 'c1' },
+		]).coupons.get('x');
+
+		expect(isContyError(result)).toBe(true);
+		expect(isContyError(result, 'coupon_exists')).toBe(true);
+		expect(isContyError(result, 'not_found')).toBe(false);
+		expect(isCouponExists(result)).toBe(true);
+		expect(isNotFound(result)).toBe(false);
+	});
+
+	test('match an error caught from unwrap', async () => {
+		const error = await clientFor('rate_limited')
+			.me()
+			.unwrap()
+			.catch((cause: unknown) => cause);
+
+		expect(isContyError(error)).toBe(true);
+		expect(isRateLimited(error)).toBe(true);
+		expect(isValidationFailed(error)).toBe(false);
+	});
+
+	test('narrow details', async () => {
+		const result = await clientFor('coupon_exists', [
+			{ coupon_id: 'c1' },
+		]).coupons.get('x');
+
+		expect(
+			isCouponExists(result) ? result.error.details[0]?.coupon_id : null,
+		).toBe('c1');
+	});
+
+	test('a success, a network failure and other values are never one', async () => {
+		const ok = await new Conty({
+			rest: { fetch: async () => json({}) },
+		}).me();
+		const offline = await new Conty({
+			rest: {
+				retries: 0,
+				fetch: async () => {
+					throw new Error('offline');
+				},
+			},
+		}).me();
+
+		for (const value of [
+			ok,
+			offline,
+			new Error('x'),
+			null,
+			undefined,
+			'x',
+		]) {
+			expect(isContyError(value)).toBe(false);
+			expect(isRateLimited(value)).toBe(false);
+		}
 	});
 });
