@@ -165,6 +165,72 @@ O módulo exporta `verify` (Só a verificação, devolve `boolean`), `construct`
 Durante a troca do segredo, passe os dois: `[novo, antigo]`.
 Para testar o seu endpoint, `sign({ body, secret })` gera o cabeçalho como a Conty gera.
 
+### Handlers prontos
+
+Cada framework tem um `Webhooks` que valida a assinatura, converte o corpo e chama o handler do evento.
+O nome vem do tipo: `application.approved` roda `onApplicationApproved`, `mission.video_submitted` roda `onMissionVideoSubmitted`.
+
+</div>
+
+```ts
+import { Webhooks } from 'contyos/hono';
+import { Hono } from 'hono';
+
+const app = new Hono().post(
+	'/webhooks/conty',
+	Webhooks({
+		secret: process.env.CONTY_WEBHOOK_SECRET,
+		async onApplicationApproved({ data }) {
+			// `data` já vem tipado para este evento.
+		},
+		// Roda para todo evento que não tem handler próprio.
+		async onEvent(event) {},
+		// Chamado quando um handler lança. A entrega responde 500 e a Conty tenta de novo.
+		onError(error, event) {},
+	}),
+);
+```
+
+<div align="center">
+
+A resposta é `200` quando o evento foi aceito (mesmo sem handler), `400` quando a assinatura ou o corpo não valem e `500` quando um handler lança.
+A Conty espera `2xx` em até 10 segundos, então deixe o trabalho pesado para uma fila.
+A Conty reenvia quando falha, então deduplique pelo `event.id`.
+
+</div>
+
+| Import | Uso |
+| --- | --- |
+| `contyos/hono` | `app.post(path, Webhooks({ ... }))` |
+| `contyos/elysia` | `app.post(path, Webhooks({ ... }))` |
+| `contyos/next` | `export const POST = Webhooks({ ... })` em um `route.ts` |
+| `contyos/fetch` | `(Request) => Promise<Response>` para Bun, Deno, Workers, SvelteKit, Astro, Remix e afins |
+| `contyos/express` | `app.post(path, express.raw({ type: 'application/json' }), Webhooks({ ... }))` |
+| `contyos/fastify` | `app.register(Webhooks, { path, secret, ... })` |
+
+<div align="center">
+
+No Express o corpo precisa chegar cru (`express.raw`), por isso não use `express.json()` nessa rota.
+No Fastify o plugin cuida disso sozinho, com um parser só dele.
+
+O `contyos/fetch` aceita o `Request` ou o objeto `{ request }`, então serve direto no SvelteKit, Astro, Remix e React Router (`export const POST = Webhooks({ ... })`).
+No Cloudflare Workers o segredo vem do `env`, então passe uma função:
+
+</div>
+
+```ts
+import { Webhooks } from 'contyos/fetch';
+
+export default {
+	fetch: Webhooks((env: { CONTY_WEBHOOK_SECRET: string }) => ({
+		secret: env.CONTY_WEBHOOK_SECRET,
+		async onApplicationApproved({ data }) {},
+	})),
+};
+```
+
+<div align="center">
+
 ## Subpaths
 
 </div>
@@ -174,6 +240,7 @@ Para testar o seu endpoint, `sign({ body, secret })` gera o cabeçalho como a Co
 | `contyos` | Cliente `Conty` |
 | `contyos/rest` | Cliente HTTP da API da Conty |
 | `contyos/webhooks` | Verificação da assinatura dos webhooks (`construct`, `verify`, `sign`) |
+| `contyos/hono`, `/elysia`, `/next`, `/fetch`, `/express`, `/fastify` | `Webhooks`: handler pronto que valida e despacha os eventos |
 | `contyos/types` | Tipos da API (`API*`, `REST*`), eventos de webhook (`Webhook*`) e `Routes` |
 
 <div align="center">
