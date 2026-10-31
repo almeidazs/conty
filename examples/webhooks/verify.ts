@@ -10,9 +10,7 @@ export const receive = async (request: Request) => {
 	};
 
 	// Entrega inválida ou adulterada: 400.
-	if (!(await verify(options))) {
-		return new Response(null, { status: 400 });
-	}
+	if (!(await verify(options))) return new Response(null, { status: 400 });
 
 	// O `construct` também verifica, e devolve o evento tipado ou `null`.
 	const event = await construct(options);

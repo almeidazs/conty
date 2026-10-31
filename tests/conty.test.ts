@@ -87,7 +87,7 @@ describe('unwrap', () => {
 		const result = await client.coupons.get('x');
 
 		expect(result.ok).toBe(false);
-		expect(result.ok ? undefined : result.error.code).toBe('not_found');
+		expect(result.ok ? void 0 : result.error.code).toBe('not_found');
 	});
 
 	test('resolves with the data of a successful call', async () => {
@@ -139,7 +139,7 @@ describe('unwrap', () => {
 			.unwrap()
 			.catch((value: unknown) => value);
 
-		expect(error).toMatchObject({ type: 'network', status: undefined });
+		expect(error).toMatchObject({ type: 'network', status: void 0 });
 		expect((error as ContyError).cause).toBe(cause);
 	});
 
@@ -210,14 +210,7 @@ describe('error guards', () => {
 			},
 		}).me();
 
-		for (const value of [
-			ok,
-			offline,
-			new Error('x'),
-			null,
-			undefined,
-			'x',
-		]) {
+		for (const value of [ok, offline, new Error('x'), null, void 0, 'x']) {
 			expect(isContyError(value)).toBe(false);
 			expect(isRateLimited(value)).toBe(false);
 		}

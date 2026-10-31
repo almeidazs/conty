@@ -14,14 +14,14 @@ export const getBackoff = (attempt: number, base: number, max: number) => {
 
 /** Parses `Retry-After` (seconds or HTTP date) into milliseconds. */
 export const parseRetryAfter = (value: string | null) => {
-	if (!value) return undefined;
+	if (!value) return void 0;
 
 	const seconds = Number(value);
 	const ms = Number.isNaN(seconds)
 		? Date.parse(value) - Date.now()
 		: seconds * 1000;
 
-	return Number.isNaN(ms) ? undefined : Math.max(0, ms);
+	return Number.isNaN(ms) ? void 0 : Math.max(0, ms);
 };
 
 /**
@@ -33,9 +33,8 @@ export const shouldRetry = (
 	{ type, status, retryAfter = 0 }: RESTError,
 	retry?: boolean,
 ) => {
-	if (type === 'aborted' || retry === false || retryAfter > MAX_RETRY_AFTER) {
+	if (type === 'aborted' || retry === false || retryAfter > MAX_RETRY_AFTER)
 		return false;
-	}
 
 	if (status === 429) return true;
 

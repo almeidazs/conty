@@ -21,7 +21,7 @@ describe('request', () => {
 		});
 
 		await rest.get('users/', {
-			query: { a: 1, b: [1, 2], c: undefined, d: null, e: true },
+			query: { a: 1, b: [1, 2], c: void 0, d: null, e: true },
 		});
 
 		expect(calls[0]?.url).toBe(

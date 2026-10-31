@@ -11,9 +11,8 @@ const campaignId = process.env.CAMPAIGN_ID ?? '';
 const missionId = process.env.MISSION_ID ?? '';
 
 // 1. Criar cupons só com `campaign_id`: eles ainda não têm dono.
-for (const code of ['VERAO10', 'VERAO15', 'VERAO20']) {
+for (const code of ['VERAO10', 'VERAO15', 'VERAO20'])
 	await client.coupons.create({ code, campaign_id: campaignId }).unwrap();
-}
 
 // 2. Percorrer os cupons livres. O `iterate` só busca a próxima página quando precisa.
 const available = client.coupons.iterate({

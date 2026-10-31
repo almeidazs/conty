@@ -18,20 +18,16 @@ const interested = client.campaigns.iterateItems(campaignId, {
 	limit: 50,
 });
 
-for await (const item of interested) {
-	if (item.kind === 'application') {
-		console.log(item.id, item.status_label);
-	}
-}
+for await (const item of interested)
+	if (item.kind === 'application') console.log(item.id, item.status_label);
 
 // 2. Página por página, quando você precisa do total que o quadro devolve.
 const submitted = client.campaigns.itemsPages(campaignId, {
 	stage: 'submitted',
 });
 
-for await (const page of submitted) {
+for await (const page of submitted)
 	console.log(`${page.data.length} de ${page.total}`);
-}
 
 // 3. Abrir a primeira missão da etapa.
 for await (const item of client.campaigns.iterateItems(campaignId, {

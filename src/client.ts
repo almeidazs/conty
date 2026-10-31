@@ -23,11 +23,9 @@ export class Conty {
 		const { secret, rest } =
 			typeof options === 'string' ? { secret: options } : options;
 
-		if (rest instanceof REST) {
+		if (rest instanceof REST)
 			this.rest = secret ? rest.setSecret(secret) : rest;
-		} else {
-			this.rest = new REST({ ...rest, secret: secret ?? rest?.secret });
-		}
+		else this.rest = new REST({ ...rest, secret: secret ?? rest?.secret });
 
 		this.coupons = new Coupons(this.rest);
 		this.campaigns = new Campaigns(this.rest);

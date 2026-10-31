@@ -40,7 +40,7 @@ export const run = async (client: Conty) => {
 	if (!coupon.ok) return coupon.error.code;
 
 	const data: APICoupon = coupon.data;
-	const list: RESTGetCampaignItemsResult | undefined = undefined;
+	const list: RESTGetCampaignItemsResult | undefined = void 0;
 
 	return [data.creator?.name, list];
 };

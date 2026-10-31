@@ -14,9 +14,7 @@ const setup = () => {
 				calls.push({
 					method: String(init?.method),
 					url: new URL(url),
-					body: init?.body
-						? JSON.parse(String(init.body))
-						: undefined,
+					body: init?.body ? JSON.parse(String(init.body)) : void 0,
 				});
 
 				return json({ ok: true });

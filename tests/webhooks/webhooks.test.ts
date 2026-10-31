@@ -85,16 +85,15 @@ describe('verify', () => {
 
 	test('rejects missing, malformed and non hex signatures', async () => {
 		for (const bad of [
-			undefined,
+			void 0,
 			null,
 			'',
 			'garbage',
 			'v1=00',
 			`t=${now()}`,
 			`t=${now()},v1=zz`,
-		]) {
+		])
 			expect(await verify({ body, header: bad, secret })).toBe(false);
-		}
 	});
 });
 
@@ -106,7 +105,7 @@ describe('construct', () => {
 	});
 
 	test('returns null for a bad signature or a body that is not JSON', async () => {
-		expect(await construct({ body, header: undefined, secret })).toBeNull();
+		expect(await construct({ body, header: void 0, secret })).toBeNull();
 		expect(
 			await construct({
 				body: 'nope',

@@ -7,7 +7,7 @@ import type { RESTFailure, RESTResult, RESTSuccess } from '../types';
 export const parseResponse = async (response: Response): Promise<unknown> => {
 	const text = await response.text();
 
-	if (!text) return undefined;
+	if (!text) return void 0;
 
 	if (!response.headers.get('content-type')?.includes('json')) return text;
 
@@ -32,7 +32,7 @@ export const success = <T>(
 const readAPIError = (body: unknown): APIError | undefined => {
 	const error = (body as { error?: APIError } | null)?.error;
 
-	return typeof error?.code === 'string' ? error : undefined;
+	return typeof error?.code === 'string' ? error : void 0;
 };
 
 export const httpFailure = (response: Response, body: unknown): RESTFailure => {
@@ -63,7 +63,7 @@ export const toFailure = (
 	cause: unknown,
 	signal?: AbortSignal,
 ): RESTFailure => {
-	const name = cause instanceof Error ? cause.name : undefined;
+	const name = cause instanceof Error ? cause.name : void 0;
 	const type = signal?.aborted
 		? 'aborted'
 		: name === 'TimeoutError'

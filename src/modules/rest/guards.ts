@@ -8,7 +8,7 @@ const codeOf = (value: unknown) => {
 
 	const failure = value as Partial<RESTFailure> | null;
 
-	return failure?.ok === false ? failure.error?.code : undefined;
+	return failure?.ok === false ? failure.error?.code : void 0;
 };
 
 /**
@@ -19,7 +19,7 @@ const codeOf = (value: unknown) => {
 export const isContyError = ((value: unknown, code?: APIErrorCode) => {
 	const found = codeOf(value);
 
-	return found !== undefined && (code === undefined || found === code);
+	return found !== void 0 && (code === void 0 || found === code);
 }) as IsContyError;
 
 const is = <Code extends APIErrorCode>(code: Code) =>

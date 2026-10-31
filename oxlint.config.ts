@@ -10,7 +10,10 @@ export default defineConfig({
 		(plugin) => !['jsdoc', 'node', 'promise'].includes(plugin),
 	),
 	rules: {
+		'arrow-body-style': ['error', 'as-needed'],
+		curly: ['error', 'multi'],
 		'no-debugger': 'error',
+		'no-undefined': 'error',
 		'no-unused-vars': 'error',
 		'prefer-const': 'error',
 		'typescript/no-explicit-any': 'warn',

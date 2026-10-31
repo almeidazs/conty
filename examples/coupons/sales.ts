@@ -13,13 +13,9 @@ const coupons = client.coupons.iterate({
 	campaign_id: process.env.CAMPAIGN_ID,
 });
 
-for await (const coupon of coupons) {
+for await (const coupon of coupons)
 	// As vendas de cada cupom também são paginadas.
-	for await (const sale of client.coupons.iterateSales(coupon.id)) {
-		if (sale.status === 'confirmed') {
-			totalCents += sale.amount_cents;
-		}
-	}
-}
+	for await (const sale of client.coupons.iterateSales(coupon.id))
+		if (sale.status === 'confirmed') totalCents += sale.amount_cents;
 
 console.log(`Vendas confirmadas: R$ ${(totalCents / 100).toFixed(2)}`);

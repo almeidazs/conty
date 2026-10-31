@@ -15,7 +15,5 @@ for await (const campaign of campaigns) {
 	// As etapas não são paginadas.
 	const { stages } = await client.campaigns.stages(campaign.id).unwrap();
 
-	for (const stage of stages) {
-		console.log(`  ${stage.label}: ${stage.count}`);
-	}
+	for (const stage of stages) console.log(`  ${stage.label}: ${stage.count}`);
 }

@@ -22,11 +22,9 @@ export const buildUrl = (
 ): string => {
 	const url = new URL(`${trimSlashes(baseUrl)}/${trimSlashes(route)}`);
 
-	for (const [key, value] of Object.entries(query)) {
-		for (const item of [value].flat()) {
+	for (const [key, value] of Object.entries(query))
+		for (const item of [value].flat())
 			if (item != null) url.searchParams.append(key, serialize(item));
-		}
-	}
 
 	return url.toString();
 };
@@ -46,11 +44,9 @@ export const buildHeaders = (
 
 	if (secret) headers.set('authorization', `Bearer ${secret}`);
 
-	for (const group of groups) {
-		for (const [key, value] of Object.entries(group ?? {})) {
+	for (const group of groups)
+		for (const [key, value] of Object.entries(group ?? {}))
 			headers.set(key, value);
-		}
-	}
 
 	return headers;
 };
@@ -59,7 +55,7 @@ export const buildHeaders = (
 export const buildBody = (
 	body: unknown,
 ): { body?: BodyInit; contentType?: string } => {
-	if (body === undefined) return {};
+	if (body === void 0) return {};
 
 	if (
 		typeof body === 'string' ||
@@ -69,9 +65,8 @@ export const buildBody = (
 		body instanceof ArrayBuffer ||
 		body instanceof ReadableStream ||
 		ArrayBuffer.isView(body)
-	) {
+	)
 		return { body: body as BodyInit };
-	}
 
 	return { body: JSON.stringify(body), contentType: 'application/json' };
 };
@@ -79,7 +74,7 @@ export const buildBody = (
 /** Aborts on the caller signal or when the timeout elapses (`0` disables it). */
 export const buildSignal = (timeout: number, signal?: AbortSignal) =>
 	AbortSignal.any(
-		[signal, timeout > 0 ? AbortSignal.timeout(timeout) : undefined].filter(
-			(item) => item !== undefined,
+		[signal, timeout > 0 ? AbortSignal.timeout(timeout) : void 0].filter(
+			(item) => item !== void 0,
 		),
 	);

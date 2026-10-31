@@ -13,10 +13,9 @@ export const fromResult = async (
 ) => {
 	const result = await client.coupons.create(body);
 
-	if (isContyError(result, 'coupon_exists')) {
+	if (isContyError(result, 'coupon_exists'))
 		// `details` is never undefined here, and each item has the coupon id.
 		return result.error.details[0]?.coupon_id;
-	}
 
 	if (isRateLimited(result)) return result.error.retryAfter;
 
@@ -40,8 +39,7 @@ export const fromCatch = async () => {
 export const withoutDetails = async () => {
 	const result = await client.coupons.get('id');
 
-	if (isContyError(result, 'not_found')) {
+	if (isContyError(result, 'not_found'))
 		// @ts-expect-error `details` is optional for codes that don't always carry it
 		return result.error.details[0];
-	}
 };
