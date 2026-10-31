@@ -44,3 +44,29 @@ export const run = async (client: Conty) => {
 
 	return [data.creator?.name, list];
 };
+
+// `iterate` yields the items, `pages` the whole page.
+export const walk = async (client: Conty) => {
+	for await (const coupon of client.coupons.iterate({ assigned: false })) {
+		const data: APICoupon = coupon;
+
+		void data;
+	}
+
+	for await (const page of client.coupons.pages()) {
+		const hasMore: boolean = page.has_more;
+
+		void hasMore;
+	}
+
+	for await (const item of client.campaigns.iterateItems('x', {
+		stage: 'script.brand',
+	})) {
+		const kind: 'mission' | 'application' = item.kind;
+
+		void kind;
+	}
+
+	// @ts-expect-error the stage is required to walk the board
+	client.campaigns.iterateItems('x', {});
+};

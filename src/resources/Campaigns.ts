@@ -10,6 +10,7 @@ import {
 	type RESTGetCampaignStagesResult,
 	Routes,
 } from '../modules/types';
+import { items, pages } from '../shared/paginate';
 import type { ContyResponse } from '../types';
 import { respond } from './respond';
 
@@ -29,6 +30,16 @@ export class Campaigns {
 		return respond(
 			this.rest.get(Routes.campaigns(), { ...options, query }),
 		);
+	}
+
+	/** Walks every campaign of the list, fetching pages as needed. Throws a `ContyError` on failure. */
+	iterate(query: RESTGetCampaignsQuery = {}, options?: RequestOptions) {
+		return items(query, (page) => this.list(page, options));
+	}
+
+	/** Walks the list page by page. Throws a `ContyError` on failure. */
+	pages(query: RESTGetCampaignsQuery = {}, options?: RequestOptions) {
+		return pages(query, (page) => this.list(page, options));
 	}
 
 	/** Gets a campaign with blocks, requirements and review chain. */
@@ -65,5 +76,23 @@ export class Campaigns {
 				query,
 			}),
 		);
+	}
+
+	/** Walks every item of a stage, fetching pages as needed. Throws a `ContyError` on failure. */
+	iterateItems(
+		campaignId: ID,
+		query: RESTGetCampaignItemsQuery,
+		options?: RequestOptions,
+	) {
+		return items(query, (page) => this.items(campaignId, page, options));
+	}
+
+	/** Walks the items of a stage page by page. Throws a `ContyError` on failure. */
+	itemsPages(
+		campaignId: ID,
+		query: RESTGetCampaignItemsQuery,
+		options?: RequestOptions,
+	) {
+		return pages(query, (page) => this.items(campaignId, page, options));
 	}
 }

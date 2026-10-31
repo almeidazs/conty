@@ -17,6 +17,7 @@ import {
 	type RESTPutCouponSaleResult,
 	Routes,
 } from '../modules/types';
+import { items, pages } from '../shared/paginate';
 import type { ContyResponse } from '../types';
 import { respond } from './respond';
 
@@ -42,6 +43,16 @@ export class Coupons {
 		options?: RequestOptions,
 	): ContyResponse<RESTGetCouponsResult> {
 		return respond(this.rest.get(Routes.coupons(), { ...options, query }));
+	}
+
+	/** Walks every coupon of the list, fetching pages as needed. Throws a `ContyError` on failure. */
+	iterate(query: RESTGetCouponsQuery = {}, options?: RequestOptions) {
+		return items(query, (page) => this.list(page, options));
+	}
+
+	/** Walks the list page by page. Throws a `ContyError` on failure. */
+	pages(query: RESTGetCouponsQuery = {}, options?: RequestOptions) {
+		return pages(query, (page) => this.list(page, options));
 	}
 
 	/** Gets a coupon with its current rate and totals. */
@@ -99,6 +110,24 @@ export class Coupons {
 				query,
 			}),
 		);
+	}
+
+	/** Walks every sale of a coupon, fetching pages as needed. Throws a `ContyError` on failure. */
+	iterateSales(
+		couponId: ID,
+		query: RESTGetCouponSalesQuery = {},
+		options?: RequestOptions,
+	) {
+		return items(query, (page) => this.listSales(couponId, page, options));
+	}
+
+	/** Walks the sales of a coupon page by page. Throws a `ContyError` on failure. */
+	salesPages(
+		couponId: ID,
+		query: RESTGetCouponSalesQuery = {},
+		options?: RequestOptions,
+	) {
+		return pages(query, (page) => this.listSales(couponId, page, options));
 	}
 
 	/** Creates or updates a sale by the id of your system. Idempotent. */
