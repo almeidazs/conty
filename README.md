@@ -8,7 +8,7 @@ Um cliente tipado, sem dependências, para conversar com a Conty em Node.js e Bu
 
 <img src="https://raw.githubusercontent.com/almeidazs/conty/main/assets/banner.png" alt="contyos" />
 
-[Instalação](#instalação) · [Uso](#uso) · [REST](#rest) · [Subpaths](#subpaths) · [Desenvolvimento](#desenvolvimento)
+[Instalação](#instalação) · [Uso](#uso) · [REST](#rest) · [CLI](#cli) · [Subpaths](#subpaths) · [Desenvolvimento](#desenvolvimento)
 
 <br />
 
@@ -326,6 +326,103 @@ export default {
 	})),
 };
 ```
+
+<div align="center">
+
+## CLI
+
+O pacote traz o comando `conty`, com tudo que o SDK faz e as ferramentas para testar webhooks. Não instala dependências extras para quem só usa o SDK.
+
+</div>
+
+```sh
+npx contyos --help
+# Ou instalado
+npm install -g contyos
+```
+
+<div align="center">
+
+### Conta
+
+`conty login` pergunta o nome do perfil e a chave de API, confere a chave na Conty e salva em `~/.config/conty/config.json` (permissão 600).
+
+</div>
+
+```sh
+conty login                 # interativo
+conty whoami                # confere a chave na Conty: perfil, marca e chave em uso
+conty profiles              # perfis salvos
+conty switch agencia        # troca o perfil atual
+conty logout agencia
+
+# CI, sem terminal
+echo "$CONTY_API_KEY" | conty login --name loja --with-key
+```
+
+<div align="center">
+
+A chave vem de `--profile` (ou `CONTY_PROFILE`), depois de `CONTY_API_KEY`, depois do perfil atual.
+`--base-url` (ou `CONTY_BASE_URL`) aponta para outra API.
+
+### Recursos
+
+</div>
+
+```sh
+conty coupons list --no-assigned --limit 10
+conty coupons create --code FULANA10 --mission-id <id>
+conty coupons upsert-sale <id> pedido-10293 --amount-cents 15000 --status confirmed --occurred-at 2026-10-21T15:42:00Z
+conty campaigns items <id> --stage interested --only-compatible --all
+conty missions get <id>
+
+# O corpo também vem de JSON (inline, @arquivo ou - para o stdin). As flags vencem.
+conty coupons create -d @cupom.json --code OUTRO10
+```
+
+<div align="center">
+
+Sai uma tabela no terminal e JSON puro com `--json` ou quando a saída é um pipe. As listas trazem uma página (`--limit`, `--cursor`) e `--all` percorre todas, em NDJSON no `--json`.
+Exit code: `0` ok, `1` erro da API ou de rede, `2` uso errado.
+
+### Chamada crua
+
+</div>
+
+```sh
+conty api GET /coupons -q limit=5 -q assigned=false
+conty api POST /coupons -d '{"code":"FULANA10","mission_id":"<id>"}' -i
+```
+
+<div align="center">
+
+### Webhooks
+
+A Conty só entrega webhook em uma URL pública cadastrada no painel, então o `listen` é um receptor local: ele verifica a assinatura, mostra cada evento e repassa para o seu app. O `trigger` manda um evento assinado, como a Conty mandaria.
+
+</div>
+
+```sh
+# terminal 1: sem --forward-to, o listen só mostra os eventos
+conty listen
+# ou repassando para o seu app
+conty listen --forward-to localhost:3000/webhooks/conty
+
+# terminal 2
+conty trigger application.approved
+conty trigger mission.video_submitted --set data.submission.resubmission=true
+
+# em outro destino, ou para conferir uma entrega capturada
+conty trigger webhook.test --url http://localhost:3000/webhooks/conty
+conty webhooks verify payload.json --signature 't=...,v1=...' --secret whsec_...
+```
+
+<div align="center">
+
+O `listen` imprime o segredo (`whsec_...`) que assina e verifica, gerado uma vez e salvo no perfil. Coloque-o no `.env` do seu app.
+Para receber eventos reais, aponte um túnel (ngrok, cloudflared) para a porta do `listen` e use o segredo do endpoint em `--secret`.
+
+</div>
 
 <div align="center">
 
