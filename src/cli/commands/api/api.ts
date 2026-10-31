@@ -3,7 +3,7 @@ import { Argument, type Command, InvalidArgumentError } from 'commander';
 import type { HTTPMethod } from '../../../modules/rest';
 import { createClient } from '../../shared/auth';
 import { collect, globals, readData } from '../../shared/input';
-import { print, reportError } from '../../shared/output';
+import { reportError } from '../../shared/output';
 import { HTTP_METHODS } from '../../types';
 
 const API = 'https://api.appconty.com/public/v1';
@@ -122,7 +122,12 @@ export const api = (program: Command) =>
 						].join('\n'),
 					);
 
-				if (result.ok) return print(options, result.data);
+				if (result.ok)
+					return console.log(
+						typeof result.data === 'string'
+							? result.data
+							: JSON.stringify(result.data, null, 2),
+					);
 
 				// Like curl: the body goes to stdout even on an error, the summary to stderr.
 				if (result.error.body !== void 0)
