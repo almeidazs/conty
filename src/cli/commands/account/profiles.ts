@@ -3,7 +3,7 @@ import type { Command } from 'commander';
 import { mask } from '../../shared/auth';
 import { loadConfig } from '../../shared/config';
 import { globals } from '../../shared/input';
-import { print } from '../../shared/output';
+import { print, wantsJson } from '../../shared/output';
 
 export const profiles = (parent: Command) =>
 	parent
@@ -20,10 +20,19 @@ export const profiles = (parent: Command) =>
 				}),
 			);
 
+			const options = globals(command);
+			// A star marks the current profile in the table; JSON keeps the boolean.
+			const shown = wantsJson(options)
+				? rows
+				: rows.map((row) => ({
+						...row,
+						current: row.current ? '*' : '',
+					}));
+
 			print(
-				globals(command),
+				options,
 				rows.length > 0
-					? { data: rows, has_more: false, next_cursor: null }
+					? { data: shown, has_more: false, next_cursor: null }
 					: 'Nenhum perfil salvo. Rode `conty login`.',
 				[
 					['atual', 'current'],
