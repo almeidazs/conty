@@ -15,10 +15,10 @@ import { respond } from './respond';
 
 /** Campaigns (agreements and standalone ones) and their board. Read only. */
 export class Campaigns {
-	readonly #rest: REST;
+	private readonly rest: REST;
 
 	constructor(rest: REST) {
-		this.#rest = rest;
+		this.rest = rest;
 	}
 
 	/** Lists the brand's campaigns, newest first. */
@@ -27,7 +27,7 @@ export class Campaigns {
 		options?: RequestOptions,
 	): ContyResponse<RESTGetCampaignsResult> {
 		return respond(
-			this.#rest.get(Routes.campaigns(), { ...options, query }),
+			this.rest.get(Routes.campaigns(), { ...options, query }),
 		);
 	}
 
@@ -36,7 +36,7 @@ export class Campaigns {
 		campaignId: ID,
 		options?: RequestOptions,
 	): ContyResponse<RESTGetCampaignResult> {
-		return respond(this.#rest.get(Routes.campaign(campaignId), options));
+		return respond(this.rest.get(Routes.campaign(campaignId), options));
 	}
 
 	/** Gets the stages of the board, with counts, sorts and filters of each. */
@@ -46,7 +46,7 @@ export class Campaigns {
 		options?: RequestOptions,
 	): ContyResponse<RESTGetCampaignStagesResult> {
 		return respond(
-			this.#rest.get(Routes.campaignStages(campaignId), {
+			this.rest.get(Routes.campaignStages(campaignId), {
 				...options,
 				query,
 			}),
@@ -60,7 +60,7 @@ export class Campaigns {
 		options?: RequestOptions,
 	): ContyResponse<RESTGetCampaignItemsResult> {
 		return respond(
-			this.#rest.get(Routes.campaignItems(campaignId), {
+			this.rest.get(Routes.campaignItems(campaignId), {
 				...options,
 				query,
 			}),

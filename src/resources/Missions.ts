@@ -5,10 +5,10 @@ import { respond } from './respond';
 
 /** Missions of the creators. Read only. */
 export class Missions {
-	readonly #rest: REST;
+	private readonly rest: REST;
 
 	constructor(rest: REST) {
-		this.#rest = rest;
+		this.rest = rest;
 	}
 
 	/** Gets a mission with deliveries, content, post, metrics, dates and coupon. */
@@ -16,6 +16,6 @@ export class Missions {
 		missionId: ID,
 		options?: RequestOptions,
 	): ContyResponse<RESTGetMissionResult> {
-		return respond(this.#rest.get(Routes.mission(missionId), options));
+		return respond(this.rest.get(Routes.mission(missionId), options));
 	}
 }

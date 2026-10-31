@@ -29,17 +29,17 @@ import type {
 } from './types';
 
 export class REST {
-	readonly #options: RESTOptions;
-	#secret?: string;
+	private readonly options: RESTOptions;
+	private secret?: string;
 
 	constructor(options: RESTOptions = {}) {
-		this.#options = options;
-		this.#secret = options.secret;
+		this.options = options;
+		this.secret = options.secret;
 	}
 
 	/** Replaces the secret used on the next requests. */
 	setSecret(secret?: string): this {
-		this.#secret = secret;
+		this.secret = secret;
 
 		return this;
 	}
@@ -68,7 +68,7 @@ export class REST {
 	async request<T = unknown>(data: RequestData): Promise<RESTResult<T>> {
 		const { method, route, signal, retry } = data;
 
-		const options = this.#options;
+		const options = this.options;
 
 		const url = buildUrl(
 			options.baseUrl ?? DEFAULT_BASE_URL,
@@ -82,7 +82,7 @@ export class REST {
 			method,
 			body,
 			headers: buildHeaders(
-				this.#secret,
+				this.secret,
 				contentType,
 				options.headers,
 				data.headers,
@@ -101,14 +101,14 @@ export class REST {
 
 		for (let attempt = 1; ; attempt++) {
 			const context = { method, url, attempt };
-			const result = await this.#send<T>(context, init, timeout, signal);
+			const result = await this.send<T>(context, init, timeout, signal);
 
 			if (result.ok) return result;
 
 			const { error } = result;
 
 			if (attempt > retries || !shouldRetry(method, error, retry)) {
-				this.#emit('onError', { ...context, error });
+				this.emit('onError', { ...context, error });
 
 				return result;
 			}
@@ -121,13 +121,13 @@ export class REST {
 					options.backoff?.max ?? DEFAULT_BACKOFF_MAX,
 				);
 
-			this.#emit('onRetry', { ...context, delay, error });
+			this.emit('onRetry', { ...context, delay, error });
 
 			await sleep(delay, signal);
 		}
 	}
 
-	async #send<T>(
+	private async send<T>(
 		context: RequestHookContext,
 		init: RequestInit,
 		timeout: number,
@@ -137,17 +137,17 @@ export class REST {
 
 		const startedAt = performance.now();
 
-		this.#emit('onRequest', context);
+		this.emit('onRequest', context);
 
 		try {
-			const response = await (this.#options.fetch ?? fetch)(context.url, {
+			const response = await (this.options.fetch ?? fetch)(context.url, {
 				...init,
 				signal: buildSignal(timeout, signal),
 			});
 
 			const body = await parseResponse(response);
 
-			this.#emit('onResponse', {
+			this.emit('onResponse', {
 				...context,
 				status: response.status,
 				duration: performance.now() - startedAt,
@@ -162,13 +162,13 @@ export class REST {
 	}
 
 	/** Hooks must never break a request, so their errors are swallowed. */
-	#emit<K extends keyof RESTHooks>(
+	private emit<K extends keyof RESTHooks>(
 		hook: K,
 		context: Parameters<NonNullable<RESTHooks[K]>>[0],
 	) {
 		try {
 			(
-				this.#options.hooks?.[hook] as
+				this.options.hooks?.[hook] as
 					| ((context: unknown) => void)
 					| undefined
 			)?.(context);

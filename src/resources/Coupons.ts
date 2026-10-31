@@ -22,10 +22,10 @@ import { respond } from './respond';
 
 /** Coupons per creator, and their sales. */
 export class Coupons {
-	readonly #rest: REST;
+	private readonly rest: REST;
 
 	constructor(rest: REST) {
-		this.#rest = rest;
+		this.rest = rest;
 	}
 
 	/** Creates a coupon: the creator's (`mission_id`) or an available one (`campaign_id`). */
@@ -33,7 +33,7 @@ export class Coupons {
 		body: RESTPostCouponBody,
 		options?: RequestOptions,
 	): ContyResponse<RESTPostCouponResult> {
-		return respond(this.#rest.post(Routes.coupons(), { ...options, body }));
+		return respond(this.rest.post(Routes.coupons(), { ...options, body }));
 	}
 
 	/** Lists the brand's coupons, newest first. */
@@ -41,7 +41,7 @@ export class Coupons {
 		query?: RESTGetCouponsQuery,
 		options?: RequestOptions,
 	): ContyResponse<RESTGetCouponsResult> {
-		return respond(this.#rest.get(Routes.coupons(), { ...options, query }));
+		return respond(this.rest.get(Routes.coupons(), { ...options, query }));
 	}
 
 	/** Gets a coupon with its current rate and totals. */
@@ -49,7 +49,7 @@ export class Coupons {
 		couponId: ID,
 		options?: RequestOptions,
 	): ContyResponse<RESTGetCouponResult> {
-		return respond(this.#rest.get(Routes.coupon(couponId), options));
+		return respond(this.rest.get(Routes.coupon(couponId), options));
 	}
 
 	/** Changes the code or the discount, or cancels the coupon (final). */
@@ -59,7 +59,7 @@ export class Coupons {
 		options?: RequestOptions,
 	): ContyResponse<RESTPatchCouponResult> {
 		return respond(
-			this.#rest.patch(Routes.coupon(couponId), { ...options, body }),
+			this.rest.patch(Routes.coupon(couponId), { ...options, body }),
 		);
 	}
 
@@ -70,7 +70,7 @@ export class Coupons {
 		options?: RequestOptions,
 	): ContyResponse<RESTPostCouponAssignResult> {
 		return respond(
-			this.#rest.post(Routes.couponAssign(couponId), {
+			this.rest.post(Routes.couponAssign(couponId), {
 				...options,
 				body,
 			}),
@@ -83,7 +83,7 @@ export class Coupons {
 		options?: RequestOptions,
 	): ContyResponse<RESTPostCouponUnassignResult> {
 		return respond(
-			this.#rest.post(Routes.couponUnassign(couponId), options),
+			this.rest.post(Routes.couponUnassign(couponId), options),
 		);
 	}
 
@@ -94,7 +94,7 @@ export class Coupons {
 		options?: RequestOptions,
 	): ContyResponse<RESTGetCouponSalesResult> {
 		return respond(
-			this.#rest.get(Routes.couponSales(couponId), {
+			this.rest.get(Routes.couponSales(couponId), {
 				...options,
 				query,
 			}),
@@ -109,7 +109,7 @@ export class Coupons {
 		options?: RequestOptions,
 	): ContyResponse<RESTPutCouponSaleResult> {
 		return respond(
-			this.#rest.put(Routes.couponSale(couponId, externalId), {
+			this.rest.put(Routes.couponSale(couponId, externalId), {
 				...options,
 				body,
 			}),
