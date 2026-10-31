@@ -73,6 +73,38 @@ console.log(coupon.data.id, coupon.data.totals.sales_count);
 
 <div align="center">
 
+Há exemplos completos em [`examples/`](./examples).
+
+### Paginação
+
+`iterate` percorre os itens e busca a próxima página só quando precisa. Uma página com erro lança `ContyError`.
+
+</div>
+
+```ts
+for await (const coupon of client.coupons.iterate({ assigned: false })) {
+	console.log(coupon.code);
+}
+```
+
+<div align="center">
+
+| Lista | Itens | Páginas |
+| --- | --- | --- |
+| `coupons.list` | `coupons.iterate` | `coupons.pages` |
+| `coupons.listSales` | `coupons.iterateSales` | `coupons.salesPages` |
+| `campaigns.list` | `campaigns.iterate` | `campaigns.pages` |
+| `campaigns.items` | `campaigns.iterateItems` | `campaigns.itemsPages` |
+
+### Repetir chamadas
+
+A API não tem `Idempotency-Key`. `coupons.upsertSale` (pelo `external_id`) e `coupons.assign` (com a mesma missão) são seguros de repetir.
+`coupons.create` não é: repetir devolve `coupon_exists`, com o id do cupom em `details`.
+
+</div>
+
+<div align="center">
+
 ### Lançar erros
 
 O método devolve o resultado, e `.unwrap()` vira os dados ou lança um `ContyError`.
