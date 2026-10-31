@@ -29,6 +29,23 @@ describe('request', () => {
 		);
 	});
 
+	test('trims boundary slashes while preserving internal slashes', async () => {
+		const { rest, calls } = createRest(() => json({}), {
+			baseUrl: 'https://example.test/v1///',
+		});
+
+		await rest.get(`${'/'.repeat(10000)}users//profile///`);
+		await rest.get('////');
+		const internalSlashes = '/'.repeat(100000);
+		await rest.get(`users${internalSlashes}profile`);
+
+		expect(calls[0]?.url).toBe('https://example.test/v1/users//profile');
+		expect(calls[1]?.url).toBe('https://example.test/v1/');
+		expect(calls[2]?.url).toBe(
+			`https://example.test/v1/users${internalSlashes}profile`,
+		);
+	});
+
 	test('defaults to the Conty API', async () => {
 		const { rest, calls } = createRest(() => json({}));
 

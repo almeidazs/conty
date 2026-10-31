@@ -1,7 +1,15 @@
 import { USER_AGENT } from '../constants';
 import type { QueryValue, RequestQuery } from '../types';
 
-const trimSlashes = (value: string) => value.replace(/^\/+|\/+$/g, '');
+const trimSlashes = (value: string) => {
+	let start = 0;
+	let end = value.length;
+	
+	while (start < end && value[start] === '/') start++;
+	while (end > start && value[end - 1] === '/') end--;
+	
+	return value.slice(start, end);
+};
 
 const serialize = (value: NonNullable<QueryValue>) =>
 	value instanceof Date ? value.toISOString() : String(value);
