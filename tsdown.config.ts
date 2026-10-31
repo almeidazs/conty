@@ -1,6 +1,6 @@
 import { defineConfig } from 'tsdown';
 
-export default defineConfig({
+const library = defineConfig({
 	clean: true,
 	cwd: process.cwd(),
 	deps: {
@@ -28,3 +28,22 @@ export default defineConfig({
 	treeshake: true,
 	tsconfig: 'tsconfig.build.json',
 });
+
+// The CLI is its own bundle: its dependencies (devDependencies, like
+// @clack/prompts) are inlined here, so the SDK keeps no runtime dependency.
+const cli = defineConfig({
+	clean: false,
+	cwd: process.cwd(),
+	dts: false,
+	entry: { cli: 'src/cli/index.ts' },
+	fixedExtension: false,
+	format: ['esm'],
+	minify: true,
+	platform: 'node',
+	sourcemap: false,
+	target: 'node20',
+	treeshake: true,
+	tsconfig: 'tsconfig.build.json',
+});
+
+export default [library, cli].flat();

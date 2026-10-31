@@ -13,6 +13,9 @@
 		"type": "git",
 		"url": "git+https://github.com/almeidazs/conty.git"
 	},
+	"bin": {
+		"conty": "./dist/cli.js"
+	},
 	"files": [
 		"LICENSE",
 		"dist",
@@ -137,9 +140,11 @@
 		"test": "bun test tests"
 	},
 	"devDependencies": {
+		"@clack/prompts": "^1.8.1",
 		"@commitlint/config-conventional": "^21.2.4",
 		"@types/bun": "^1.4.4",
 		"@types/express": "^5.0.6",
+		"commander": "^15.0.0",
 		"commitlint": "^21.2.4",
 		"elysia": "^1.4.30",
 		"express": "^5.3.0",
